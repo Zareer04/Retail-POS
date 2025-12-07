@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { api } from "../../../../lib/api";
+import { api } from "@/lib/api";
 
 export default function CategoryFilter({ selected, setSelected }: any) {
    const [catagories, setCategories] = useState([]);
@@ -17,7 +17,7 @@ export default function CategoryFilter({ selected, setSelected }: any) {
    return (
       <select
          className="border p-2 rounded"
-         value = {selected}
+         value={selected}
          onChange={(e) => setSelected(e.target.value)}
       >
          <option value="">All Categories</option>

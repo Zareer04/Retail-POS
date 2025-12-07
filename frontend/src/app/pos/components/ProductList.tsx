@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { api } from "../../../../lib/api";
-import { useCart } from "../../../../store/useCart";
+import { api } from "@/lib/api";
+import { useCart } from "@/store/useCart";
 
 interface ProductListProps {
    search?: string;

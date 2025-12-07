@@ -1,6 +1,6 @@
 "use client";
 
-import { useCart } from "../../../../store/useCart";
+import { useCart } from "@/store/useCart";
 
 export default function Cart() {
    const { items, increaseQuantity, decreaseQuantity, removeItem } = useCart();
@@ -9,7 +9,7 @@ export default function Cart() {
 
    return (
       <div className="border rounded-lg p-4 w-full">
-         <h2 className="text-lg font-bold mb-4">Cart</h2> 
+         <h2 className="text-lg font-bold mb-4">Cart</h2>
 
          {items.map((item) => (
             <div key={item.id} className="flex items-center justify-betweeen mb-2">

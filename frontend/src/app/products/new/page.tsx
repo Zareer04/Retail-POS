@@ -2,9 +2,9 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { productSchema, ProductSchema } from "../../../../lib/validation/productSchema";
+import { productSchema, ProductSchema } from "@/lib/validation/productSchema";
 
-import { api } from "../../../../lib/api";
+import { api } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, } from "@/components/ui/form";
