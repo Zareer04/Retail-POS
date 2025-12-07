@@ -1,27 +1,27 @@
 'use client';
 
-import { useCart } from "../../../store/useCart";
-import { Button } from "@/components/ui/button";
+import Cart from "./components/Cart";
+import ProductList from "./components/ProductList";
+import CategoryFilter from "./components/CategoryFilter";
+import SearchBar from "./components/SearchBar";
+import { useState } from "react";
 
-export default function POSPage() {
-   const items = useCart(s => s.items);
-   const remove = useCart(s => s.removeItem);
-
-   const total = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+export default function POSpage() {
+   const [search, setSearch] = useState('');
+   const [category, setCategory] = useState('');
 
    return (
-      <div className="p-6 grid grid-cols-2 gap-6">
-         {/*Cart Area */}
-         <div className="p-4 border rounded-lg">
-            <h2 className="text-xl font-bold mb-4">Cart</h2>
-            {items.map((i) => (
-               <div key={i.id} className="flex justify-between border-b py-2">
-                  <p>{i.name} x {i.quantity}</p>
-                  <p>৳ {i.price * i.quantity}</p>
-                  <Button variant="destructive" onClick={() => remove(i.id)}>Remove</Button>
-               </div>
-            ))}
-            <div className="text-xl font-bold mt-4">Total: ৳ {total}</div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
+         {/*Left-products*/}
+         <div className="col-span-2 space-y-4">
+            <SearchBar search={search} setSearch={setSearch} />
+            <CategoryFilter selected={category} setSelected={setCategory} />
+            <ProductList search={search} category={category} />
+         </div>
+
+         {/*Right-cart*/}
+         <div className="col-span-1">
+            <Cart />
          </div>
       </div>
    );
