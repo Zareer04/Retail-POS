@@ -115,126 +115,131 @@ export default function EditProduct() {
 
    return (
       <div className="mx-auto p-6">
-         <Link href="/" className="text-blue-500 hover:underline mb-4 inline-block">
-            &larr; Back to Home
-         </Link>
          <h1 className="text-2xl font-bold mb-6">Edit Product</h1>
-
          {initialLoad ? (
             <p>Loading product...</p>
          ) : (
-            <Form {...form}>
-               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <div>
+               <Button
+                  variant="outline"
+                  onClick={() => router.push("/")}
+                  className="mb-4"
+               >
+                  ← Back to Home
+               </Button>
+               <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
 
-                  {/* Name */}
-                  <FormField
-                     control={form.control}
-                     name="name"
-                     render={({ field }) => (
-                        <FormItem>
-                           <FormLabel>Product Name</FormLabel>
-                           <FormControl>
-                              <Input placeholder="Enter Product Name" {...field} />
-                           </FormControl>
-                           <FormMessage />
-                        </FormItem>
-                     )}
-                  />
+                     {/* Name */}
+                     <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                           <FormItem>
+                              <FormLabel>Product Name</FormLabel>
+                              <FormControl>
+                                 <Input placeholder="Enter Product Name" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                           </FormItem>
+                        )}
+                     />
 
-                  {/* SKU */}
-                  <FormField
-                     control={form.control}
-                     name="sku"
-                     render={({ field }) => (
-                        <FormItem>
-                           <FormLabel>SKU</FormLabel>
-                           <FormControl>
-                              <Input placeholder="Enter SKU" {...field} />
-                           </FormControl>
-                           <FormMessage />
-                        </FormItem>
-                     )}
-                  />
+                     {/* SKU */}
+                     <FormField
+                        control={form.control}
+                        name="sku"
+                        render={({ field }) => (
+                           <FormItem>
+                              <FormLabel>SKU</FormLabel>
+                              <FormControl>
+                                 <Input placeholder="Enter SKU" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                           </FormItem>
+                        )}
+                     />
 
-                  {/* Price */}
-                  <FormField
-                     control={form.control}
-                     name="price"
-                     render={({ field }) => (
-                        <FormItem>
-                           <FormLabel>Price</FormLabel>
-                           <FormControl>
-                              <Input placeholder="Enter Price" {...field} />
-                           </FormControl>
-                           <FormMessage />
-                        </FormItem>
-                     )}
-                  />
+                     {/* Price */}
+                     <FormField
+                        control={form.control}
+                        name="price"
+                        render={({ field }) => (
+                           <FormItem>
+                              <FormLabel>Price</FormLabel>
+                              <FormControl>
+                                 <Input placeholder="Enter Price" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                           </FormItem>
+                        )}
+                     />
 
-                  {/* Stock */}
-                  <FormField
-                     control={form.control}
-                     name="stock_quantity"
-                     render={({ field }) => (
-                        <FormItem>
-                           <FormLabel>Stock Quantity</FormLabel>
-                           <FormControl>
-                              <Input placeholder="Enter Stock Quantity" {...field} />
-                           </FormControl>
-                           <FormMessage />
-                        </FormItem>
-                     )}
-                  />
+                     {/* Stock */}
+                     <FormField
+                        control={form.control}
+                        name="stock_quantity"
+                        render={({ field }) => (
+                           <FormItem>
+                              <FormLabel>Stock Quantity</FormLabel>
+                              <FormControl>
+                                 <Input placeholder="Enter Stock Quantity" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                           </FormItem>
+                        )}
+                     />
 
-                  {/* Category */}
-                  <FormField
-                     control={form.control}
-                     name="category"
-                     render={({ field }) => (
-                        <FormItem>
-                           <FormLabel>Category</FormLabel>
-                           <FormControl>
-                              <Select onValueChange={field.onChange} value={field.value}>
-                                 <SelectTrigger>
-                                    <SelectValue placeholder="Select Category" />
-                                 </SelectTrigger>
-                                 <SelectContent>
-                                    {categories.map((c: any) => (
-                                       <SelectItem key={c.id} value={String(c.id)}>
-                                          {c.name}
-                                       </SelectItem>
-                                    ))}
-                                 </SelectContent>
-                              </Select>
-                           </FormControl>
-                           <FormMessage />
-                        </FormItem>
-                     )}
-                  />
+                     {/* Category */}
+                     <FormField
+                        control={form.control}
+                        name="category"
+                        render={({ field }) => (
+                           <FormItem>
+                              <FormLabel>Category</FormLabel>
+                              <FormControl>
+                                 <Select onValueChange={field.onChange} value={field.value}>
+                                    <SelectTrigger>
+                                       <SelectValue placeholder="Select Category" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                       {categories.map((c: any) => (
+                                          <SelectItem key={c.id} value={String(c.id)}>
+                                             {c.name}
+                                          </SelectItem>
+                                       ))}
+                                    </SelectContent>
+                                 </Select>
+                              </FormControl>
+                              <FormMessage />
+                           </FormItem>
+                        )}
+                     />
 
-                  {/* Image */}
-                  <FormField
-                     control={form.control}
-                     name="image"
-                     render={({ field }) => (
-                        <FormItem>
-                           <FormLabel>Image (optional)</FormLabel>
-                           <FormControl>
-                              <Input
-                                 type="file"
-                                 onChange={(e) => field.onChange(e.target.files)}
-                              />
-                           </FormControl>
-                           <FormMessage />
-                        </FormItem>
-                     )}
-                  />
+                     {/* Image */}
+                     <FormField
+                        control={form.control}
+                        name="image"
+                        render={({ field }) => (
+                           <FormItem>
+                              <FormLabel>Image (optional)</FormLabel>
+                              <FormControl>
+                                 <Input
+                                    type="file"
+                                    onChange={(e) => field.onChange(e.target.files)}
+                                 />
+                              </FormControl>
+                              <FormMessage />
+                           </FormItem>
+                        )}
+                     />
 
-                  <Button type="submit" disabled={loading}>
-                     {loading ? "Updating..." : "Update Product"}
-                  </Button>
-               </form>
-            </Form>
+                     <Button type="submit" disabled={loading}>
+                        {loading ? "Updating..." : "Update Product"}
+                     </Button>
+                  </form>
+               </Form>
+            </div>
          )}
       </div>
    );

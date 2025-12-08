@@ -13,6 +13,9 @@ export default function CategoriesPage() {
 
    return (
       <div className="p-6">
+         <Link href="/" className="text-blue-500 hover:underline mb-4 inline-block">
+            &larr; Back to Home
+         </Link>
          <h1 className="text-xl font-semibold mb-4">Categories</h1>
          <Link href="/categories/new" className="bg-blue-500 text-white p-2 rounded inline-block">
             Add New Category
