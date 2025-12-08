@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 
 import { useState } from "react";
+import Link from "next/link";
 
 export default function NewProductPage() {
    const [loading, setLoading] = useState(false);
@@ -31,10 +32,11 @@ export default function NewProductPage() {
       defaultValues: {
          name: "",
          sku: "",
+         barcode: "",
          price: "",
          stock_quantity: "",
          category: "",
-         image: "",
+         image: undefined,
       },
    });
 
@@ -45,15 +47,17 @@ export default function NewProductPage() {
          const formData = new FormData();
          formData.append("name", values.name);
          formData.append("sku", values.sku);
+         formData.append("barcode", values.barcode);
          formData.append("price", values.price);
          formData.append("stock_quantity", values.stock_quantity);
-         formData.append("category", values.category);
+         formData.append("category", String(Number(values.category)));
+
 
          if (values.image?.[0]) {
             formData.append("image", values.image?.[0]);
          }
 
-         const res = await api.post("products", formData, {
+         const res = await api.post("/products/", formData, {
             headers: { "Content-Type": "multipart/form-data" },
          });
 
@@ -69,6 +73,7 @@ export default function NewProductPage() {
 
    return (
       <div className="max-w-xl mx-auto p-6">
+         <Link href="/products">Back to Products</Link>
          <h1 className="text-2xl font-bold mb-6">Add New Product</h1>
 
          <Form {...form}>
@@ -98,6 +103,22 @@ export default function NewProductPage() {
                         <FormLabel>SKU</FormLabel>
                         <FormControl>
                            <Input placeholder="Enter SKU" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+
+
+               {/*Barcode*/}
+               <FormField
+                  control={form.control}
+                  name="barcode"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Barcode</FormLabel>
+                        <FormControl>
+                           <Input placeholder="Enter Barcode" {...field} />
                         </FormControl>
                         <FormMessage />
                      </FormItem>
@@ -151,7 +172,7 @@ export default function NewProductPage() {
                               </SelectTrigger>
                               <SelectContent>
                                  {categories?.map((c: any) => (
-                                    <SelectItem key={c.id} value={c.id}>
+                                    <SelectItem key={c.id} value={String(c.id)}>
                                        {c.name}
                                     </SelectItem>
                                  ))}
@@ -171,7 +192,10 @@ export default function NewProductPage() {
                      <FormItem>
                         <FormLabel>Image</FormLabel>
                         <FormControl>
-                           <Input type="file" {...field} />
+                           <Input
+                              type="file"
+                              onChange={(e) => field.onChange(e.target.files)}
+                           />
                         </FormControl>
                         <FormMessage />
                      </FormItem>

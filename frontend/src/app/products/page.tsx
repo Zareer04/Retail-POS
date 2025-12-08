@@ -8,6 +8,7 @@ import { useCart } from '@/store/useCart';
 
 import Providers from '../../../components/Providers';
 import ProductListClient from '../../../components/ProductListClient';
+import Link from 'next/link';
 
 export default function ProductsPage() {
   const add = useCart(s => s.addItem);
@@ -26,6 +27,9 @@ export default function ProductsPage() {
 
   return (
     <div className="grid grid-cols-4 gap-4 p-6">
+      <Link href="/products/new">Add New Product</Link>
+      <Link href="/pos">Back to POS</Link>
+      <Link href="/">Back to Home</Link>
       {data?.map((p: any) => (
         <Card key={p.id} className="p-4">
           <h2 className="font-bold">{p.name}</h2>

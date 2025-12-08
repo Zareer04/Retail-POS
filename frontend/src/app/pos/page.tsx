@@ -13,6 +13,7 @@ export default function POSpage() {
 
    return (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
+         <Link href="/products/new">Add New Product</Link>
          <Link href="/" className="col-span-1">
            <button className="flex items-center justify-center text-2xl font-bold bg-blue-600 text-white p-2 rounded">Back to Home</button>
          </Link>
