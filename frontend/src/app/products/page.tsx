@@ -2,28 +2,11 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useCart } from '@/store/useCart';
-
-import Providers from '../../../components/Providers';
-import ProductListClient from '../../../components/ProductListClient';
 import Link from 'next/link';
 import { useState } from 'react';
 
 export default function ProductsPage() {
-  const add = useCart(s => s.addItem);
-
-  // const { data, isLoading } = useQuery({
-  //   queryKey: ['products'],
-  //   queryFn: async () => {
-  //     const res = await api.get('products');
-  //     return res.data;
-  //   },
-  // });
-
-
-
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
 
@@ -35,8 +18,6 @@ export default function ProductsPage() {
       return res.data;
     },
   });
-
-
 
   // Fetch Categories
   const { data: categories } = useQuery({
@@ -53,73 +34,103 @@ export default function ProductsPage() {
 
   // Filtering logic
   const filteredProducts = products?.filter((p: any) => {
+
+
     const matchSearch =
       p.name.toLowerCase().includes(search.toLowerCase()) ||
       p.sku.toLowerCase().includes(search.toLowerCase());
 
     const matchCategory = categoryFilter
-      ? p.category === Number(categoryFilter)
+      ? (typeof p.category === 'object' ? p.category?.id : p.category) === Number(categoryFilter)
       : true;
 
     return matchSearch && matchCategory;
   });
 
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full border rounded">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="p-3 text-left border">Image</th>
-            <th className="p-3 text-left border">Name</th>
-            <th className="p-3 text-left border">SKU</th>
-            <th className="p-3 text-left border">Price</th>
-            <th className="p-3 text-left border">Stock</th>
-            <th className="p-3 text-left border">Actions</th>
-          </tr>
-        </thead>
+    <div className="space-y-6">
+      <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
+        <Link href="/">
+          <Button variant="outline">Back to Home</Button>
+        </Link>
+        <h1 className="text-2xl font-bold">Products</h1>
+        <div className="flex gap-4 w-full md:w-auto">
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="border p-2 rounded w-full md:w-64"
+          />
+          <select
+            className="border p-2 rounded"
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+          >
+            <option value="">All Categories</option>
+            {categories?.map((c: any) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+          <Link href="/products/new">
+            <Button>Add Product</Button>
+          </Link>
+        </div>
+      </div>
 
-        <tbody>
-          {filteredProducts?.map((p: any) => (
-            <tr key={p.id} className="border-b">
-              <td className="p-3 border">
-                {p.image ? (
-                  <img
-                    src={p.image}
-                    alt=""
-                    className="w-12 h-12 object-cover rounded"
-                  />
-                ) : (
-                  <div className="w-12 h-12 bg-gray-200 rounded" />
-                )}
-              </td>
-              <td className="p-3 border">{p.name}</td>
-              <td className="p-3 border">{p.sku}</td>
-              <td className="p-3 border">৳{p.price}</td>
-              <td className="p-3 border">{p.stock_quantity}</td>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {filteredProducts?.map((p: any) => (
+          <div key={p.id} className="bg-white dark:bg-zinc-800 border dark:border-zinc-700 rounded-xl shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col group">
 
-              <td className="p-3 border">
-                <div className="flex gap-2">
-                  <Link href={`/products/${p.id}/edit`}>
-                    <Button size="sm" variant="outline">
-                      Edit
-                    </Button>
-                  </Link>
-
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    onClick={() =>
-                      alert("Delete functionality later")
-                    }
-                  >
-                    Delete
-                  </Button>
+            {/* Image Area */}
+            <div className="aspect-square w-full overflow-hidden bg-gray-100 dark:bg-zinc-900 relative">
+              {p.image ? (
+                <img
+                  src={p.image}
+                  alt={p.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              ) : (
+                <div className="flex items-center justify-center h-full text-gray-400">
+                  <span className="text-4xl">📷</span>
                 </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              )}
+            </div>
+
+            {/* Content Area */}
+            <div className="p-4 flex flex-col flex-1">
+              <div className="flex justify-between items-start mb-2">
+                <div>
+                  <h3 className="font-bold text-lg line-clamp-1">{p.name}</h3>
+                  <p className="text-xs text-gray-500 font-mono">{p.sku}</p>
+                </div>
+                <span className={`text-xs px-2 py-1 rounded-full ${p.stock_quantity > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                  {p.stock_quantity > 0 ? `${p.stock_quantity} in stock` : 'Out of stock'}
+                </span>
+              </div>
+
+              <p className="text-xl font-bold text-primary mb-4">৳{p.price}</p>
+
+              <div className="mt-auto grid grid-cols-2 gap-2">
+                <Link href={`/products/${p.id}/edit`} className="w-full">
+                  <Button variant="outline" className="w-full">
+                    Edit
+                  </Button>
+                </Link>
+                <Button
+                  variant="destructive"
+                  className="w-full"
+                  onClick={() => alert("Delete functionality later")}
+                >
+                  Delete
+                </Button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

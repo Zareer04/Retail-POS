@@ -91,7 +91,7 @@ export default function EditProduct() {
          formData.append("barcode", values.barcode);
          formData.append("price", values.price);
          formData.append("stock_quantity", values.stock_quantity);
-         formData.append("category", String(values.category));
+         formData.append("category_id", String(values.category));
 
          if (values.image?.[0]) {
             formData.append("image", values.image[0]);

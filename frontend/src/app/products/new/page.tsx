@@ -50,7 +50,7 @@ export default function NewProductPage() {
          formData.append("barcode", values.barcode);
          formData.append("price", values.price);
          formData.append("stock_quantity", values.stock_quantity);
-         formData.append("category", String(Number(values.category)));
+         formData.append("category_id", String(Number(values.category)));
 
 
          if (values.image?.[0]) {
