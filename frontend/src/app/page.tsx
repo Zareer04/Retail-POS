@@ -1,4 +1,5 @@
 import Link from "next/link";
+import PosDashboard from "./dashboard/page";
 
 export default function Home() {
   return (
@@ -9,6 +10,7 @@ export default function Home() {
         <Link href="/categories" className="px-4 py-2 bg-blue-600 text-white rounded">Go to Categories</Link>
         <Link href="/products" className="px-4 py-2 bg-blue-600 text-white rounded">Go to Products</Link>
       </div>
+      <PosDashboard />
     </main>
   );
 }
