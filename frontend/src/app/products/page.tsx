@@ -48,13 +48,16 @@ export default function ProductsPage() {
   });
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
+    <div className="p-6">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-3xl font-bold">Products</h1>
+        <Link href="/products/new">
+          <Button>Add New Product</Button>
+        </Link>
         <Link href="/">
           <Button variant="outline">Back to Home</Button>
         </Link>
-        <h1 className="text-2xl font-bold">Products</h1>
-        <div className="flex gap-4 w-full md:w-auto">
+        <div className="flex gap-4 mb-6">
           <input
             type="text"
             placeholder="Search products..."
@@ -63,7 +66,7 @@ export default function ProductsPage() {
             className="border p-2 rounded w-full md:w-64"
           />
           <select
-            className="border p-2 rounded"
+            className="border py-2 px-3 rounded-md bg-white/40 backdrop-blur-md"
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
           >
@@ -74,59 +77,66 @@ export default function ProductsPage() {
               </option>
             ))}
           </select>
-          <Link href="/products/new">
-            <Button>Add Product</Button>
-          </Link>
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filteredProducts?.map((p: any) => (
-          <div key={p.id} className="bg-white dark:bg-zinc-800 border dark:border-zinc-700 rounded-xl shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col group">
+          <div key={p.id} className="p-4 rounded-2xl shadow-lg border border-white/30 
+              bg-white/20 backdrop-blur-xl
+              hover:scale-[1.03] transition-all duration-300
+              flex flex-col
+            ">
 
             {/* Image Area */}
-            <div className="aspect-square w-full overflow-hidden bg-gray-100 dark:bg-zinc-900 relative">
+            <div className="w-full h-40 rounded-xl overflow-hidden mb-3 bg-white/30">
               {p.image ? (
                 <img
                   src={p.image}
                   alt={p.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="flex items-center justify-center h-full text-gray-400">
+                <div className="text-center text-sm py-10 text-gray-600">
                   <span className="text-4xl">📷</span>
                 </div>
               )}
             </div>
 
             {/* Content Area */}
-            <div className="p-4 flex flex-col flex-1">
-              <div className="flex justify-between items-start mb-2">
-                <div>
-                  <h3 className="font-bold text-lg line-clamp-1">{p.name}</h3>
-                  <p className="text-xs text-gray-500 font-mono">{p.sku}</p>
-                </div>
-                <span className={`text-xs px-2 py-1 rounded-full ${p.stock_quantity > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                  {p.stock_quantity > 0 ? `${p.stock_quantity} in stock` : 'Out of stock'}
-                </span>
-              </div>
+            <h2 className="text-lg font-semibold">{p.name}</h2>
+            <p className="text-gray-700">SKU: {p.sku}</p>
 
-              <p className="text-xl font-bold text-primary mb-4">৳{p.price}</p>
+            <div className="mt-2">
+              <span className="text-xl font-bold">${p.price}</span>
+            </div>
 
-              <div className="mt-auto grid grid-cols-2 gap-2">
-                <Link href={`/products/${p.id}/edit`} className="w-full">
-                  <Button variant="outline" className="w-full">
-                    Edit
-                  </Button>
-                </Link>
-                <Button
-                  variant="destructive"
-                  className="w-full"
-                  onClick={() => alert("Delete functionality later")}
-                >
-                  Delete
+            <p className="text-gray-700 text-sm">Stock: {p.stock_quantity}</p>
+
+            <span className="bg-black/20 text-sm text-black px-3 py-1 rounded-full mt-2 w-fit">
+              {categories.find((c: any) => c.id === p.category)?.name ||
+                "Unknown"}
+            </span>
+
+            {/* Action Area */}
+            <div className="flex justify-between mt-4">
+              <Link href={`/products/${p.id}/edit`}>
+                <Button variant="secondary" className="px-4 py-1">
+                  Edit
                 </Button>
-              </div>
+              </Link>
+
+              <Button
+                variant="destructive"
+                className="px-4 py-1"
+                onClick={async () => {
+                  if (!confirm("Delete this product?")) return;
+                  await api.delete(`/products/${p.id}/`);
+                  window.location.reload();
+                }}
+              >
+                Delete
+              </Button>
             </div>
           </div>
         ))}
