@@ -15,11 +15,20 @@ class ProductSerializer(serializers.ModelSerializer):
       fields = ['id', 'name', 'sku', 'barcode', 'price', 'stock_quantity', 'category', 'category_id', 'image', 'created_at', 'updated_at']
    
 class SaleSerializer(serializers.ModelSerializer):
-   class Meta:
-      model = Sale
-      fields = ['id', 'invoice_number', 'total_amount', 'payment_method', 'created_at', 'items']
-      
+   items = SaleSerializer(many=True)
+   
+   def validate(self, data):
+      for item in data['items']:
+         product = item['product']
+         qty = item['quantity']
+         
+         if product.stock_quantity < qty:
+            raise serializers.ValidationError(
+               f"Not enough stock for {product.name}"
+            )
+            
+      return data
+   
 class SaleItemSerializer(serializers.ModelSerializer):
-   class Meta:
-      model = SaleItem
-      fields = '__all__'
+   product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())
+   quantity = serializers.IntegerField(min_value=1)
