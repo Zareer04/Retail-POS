@@ -4,7 +4,7 @@ import { useCart } from "@/store/useCart";
 import Link from "next/link";
 
 export default function Cart() {
-   const { items, increaseQuantity, decreaseQuantity, removeItem } = useCart();
+   const { items, increaseQuantity, decreaseQuantity, removeItem, clearCart } = useCart();
 
    const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -12,7 +12,18 @@ export default function Cart() {
       <div className="flex flex-col h-full bg-white dark:bg-zinc-800 text-gray-900 dark:text-gray-100">
          <div className="p-4 border-b flex justify-between items-center bg-gray-50 dark:bg-zinc-900/50">
             <h2 className="text-xl font-bold">Current Order</h2>
-            <span className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded-full dark:bg-blue-900 dark:text-blue-200">{items.length} items</span>
+            <div className="flex items-center gap-2">
+               {items.length > 0 && (
+                  <button
+                     onClick={clearCart}
+                     className="text-xs text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 px-2 py-1 rounded transition-colors"
+                     title="Clear Cart"
+                  >
+                     Clear
+                  </button>
+               )}
+               <span className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded-full dark:bg-blue-900 dark:text-blue-200">{items.length} items</span>
+            </div>
          </div>
 
          <div className="flex-1 overflow-y-auto p-4 space-y-3">
@@ -56,6 +67,7 @@ export default function Cart() {
                ))
             )}
          </div>
+
 
          <div className="p-4 bg-gray-50 dark:bg-zinc-900 border-t space-y-3">
             <div className="flex justify-between items-center text-lg font-bold">
