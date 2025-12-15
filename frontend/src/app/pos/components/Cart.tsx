@@ -1,6 +1,7 @@
 "use client";
 
 import { useCart } from "@/store/useCart";
+import Link from "next/link";
 
 export default function Cart() {
    const { items, increaseQuantity, decreaseQuantity, removeItem } = useCart();
@@ -62,12 +63,18 @@ export default function Cart() {
                <span className="text-primary">৳ {total.toFixed(2)}</span>
             </div>
 
-            <button className="w-full py-3 bg-primary text-primary-foreground font-bold rounded-lg shadow-lg hover:shadow-xl hover:opacity-90 active:scale-[0.99] transition-all flex items-center justify-center gap-2">
+            <Link
+               href="/pos/checkout"
+               className={`w-full py-3 bg-primary text-primary-foreground font-bold rounded-lg shadow-lg flex items-center justify-center gap-2 transition-all ${items.length === 0
+                  ? 'opacity-50 cursor-not-allowed pointer-events-none'
+                  : 'hover:shadow-xl hover:opacity-90 active:scale-[0.99]'
+                  }`}
+            >
                <span>Checkout</span>
                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
                </svg>
-            </button>
+            </Link>
          </div>
       </div>
    )
