@@ -1,5 +1,8 @@
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from django.db import transaction
+import uuid
 from .models import Product, Category, Sale, SaleItem
 from .serializers import ProductSerializer, CategorySerializer, SaleSerializer, SaleItemSerializer
 
@@ -24,11 +27,13 @@ class SaleViewSet(viewsets.ModelViewSet):
           "items": [
             { "product": 1, "quantity": 2 },
             { "product": 3, "quantity": 1 }
-          ]
+          ],
+          "payment_method": "Cash"
         }
         """
 
         items = request.data.get("items", [])
+        payment_method = request.data.get("payment_method", "Cash")
 
         if not items:
             return Response(
@@ -37,7 +42,14 @@ class SaleViewSet(viewsets.ModelViewSet):
             )
 
         with transaction.atomic():
-            sale = Sale.objects.create(total=0)
+            # Generate a unique invoice number
+            invoice_number = f"INV-{uuid.uuid4().hex[:8].upper()}"
+            
+            sale = Sale.objects.create(
+               total_amount=0,
+               invoice_number=invoice_number,
+               payment_method=payment_method
+            )
             total_amount = 0
 
             for item in items:
@@ -68,14 +80,14 @@ class SaleViewSet(viewsets.ModelViewSet):
                     sale=sale,
                     product=product,
                     quantity=quantity,
-                    price=product.price,
+                    unit_price=product.price,
                     subtotal=product.price * quantity
                 )
 
                 total_amount += product.price * quantity
 
             # UPDATE SALE TOTAL
-            sale.total = total_amount
+            sale.total_amount = total_amount
             sale.save()
 
         serializer = SaleSerializer(sale)
