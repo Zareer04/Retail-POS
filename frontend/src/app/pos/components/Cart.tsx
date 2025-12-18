@@ -58,8 +58,10 @@ export default function Cart() {
                            >-</button>
                            <span className="text-sm font-semibold w-4 text-center">{item.quantity}</span>
                            <button
-                              className="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-primary active:bg-gray-100 rounded"
+                              className={`w-6 h-6 flex items-center justify-center rounded ${item.quantity >= item.stock ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:text-primary active:bg-gray-100'}`}
                               onClick={() => increaseQuantity(item.id)}
+                              disabled={item.quantity >= item.stock}
+                              title={item.quantity >= item.stock ? 'Stock limit reached' : 'Increase quantity'}
                            >+</button>
                         </div>
                      </div>

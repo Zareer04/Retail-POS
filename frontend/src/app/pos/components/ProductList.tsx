@@ -56,6 +56,7 @@ export default function ProductList({ search = "", category = "" }: ProductListP
                      name: p.name,
                      price: Number(p.price),
                      quantity: 1,
+                     stock: p.stock_quantity,
                   })
                }
             >

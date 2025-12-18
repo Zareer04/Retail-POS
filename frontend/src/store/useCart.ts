@@ -5,6 +5,7 @@ interface CartItem {
    name: string;
    price: number;
    quantity: number;
+   stock: number;
 }
 
 interface CartStore {
@@ -22,6 +23,10 @@ export const useCart = create<CartStore>(set => ({
       set(state => {
          const existingItem = state.items.find(i => i.id === item.id);
          if (existingItem) {
+            // Check if adding 1 would exceed stock
+            if (existingItem.quantity + 1 > existingItem.stock) {
+               return state; // Do nothing if stock limit reached
+            }
             return {
                ...state,
                items: state.items.map(i =>
@@ -29,6 +34,11 @@ export const useCart = create<CartStore>(set => ({
                ),
             };
          }
+         // Check if initial quantity (1) exceeds stock (unlikely but safe)
+         if (item.quantity > item.stock) {
+            return state;
+         }
+
          return {
             ...state,
             items: [...state.items, { ...item, quantity: 1 }],
@@ -42,9 +52,16 @@ export const useCart = create<CartStore>(set => ({
    increaseQuantity: id =>
       set(state => ({
          ...state,
-         items: state.items.map(item =>
-            item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-         ),
+         items: state.items.map(item => {
+            if (item.id === id) {
+               // Check stock before increasing
+               if (item.quantity + 1 > item.stock) {
+                  return item;
+               }
+               return { ...item, quantity: item.quantity + 1 };
+            }
+            return item;
+         }),
       })),
    decreaseQuantity: id =>
       set(state => ({
